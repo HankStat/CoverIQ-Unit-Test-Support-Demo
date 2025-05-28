@@ -6,4 +6,4 @@ def subtract(x, y):
 
 def pad_number(x):
     """Pad a number with leading zeros to ensure it has at least 'length' digits."""
-    return str(x).zfill(3)
+    return str(x).zfill(5)
