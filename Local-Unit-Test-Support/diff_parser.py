@@ -90,7 +90,7 @@ class GitDiffParser:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Show git diff between two commits in a GitHub repo")
     # parser.add_argument("repo_url", help="GitHub repository URL")
-    parser.add_argument("--from", dest="from_commit", default="origin/main", help="Base commit (default: HEAD^)")
+    parser.add_argument("--from", dest="from_commit", default="HEAD^", help="Base commit (default: HEAD^)")
     parser.add_argument("--to", dest="to_commit", default="HEAD", help="Target commit (default: HEAD)")
     parser.add_argument("--keep", action="store_true", help="Keep cloned repo after diff (default: delete)")
 
