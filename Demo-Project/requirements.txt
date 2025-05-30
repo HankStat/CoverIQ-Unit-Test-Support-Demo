@@ -1,2 +1,6 @@
 pytest
 numpy
+python-dotenv
+faiss-cpu
+google-genai
+pydantic
