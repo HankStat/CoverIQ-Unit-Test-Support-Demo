@@ -93,16 +93,19 @@ def main(from_commit, to_commit, keep_repo, output_filename):
     # get all code files
     code_files = get_code_files(code_metadata_path)
     # divide into chunks
+    print("Prepare Code Chunk Metadata")
     code_blocks = {}
     for file in code_files:
         code_block = extract_code_blocks(file, repo_path)
         code_blocks.update(code_block)
     # create embeddings
     embeddings = [get_embedding(b["code"]) for b in code_blocks.values()]
+    print("Save embeddings into Vector Database")
     # save to vector database
     save_to_faiss(embeddings, code_blocks)
     changed_files = git_parser.get_changed_files()
     changed_functions = {}
+    print("Parse codebase with AST")
     for file in changed_files:
         filename = file.split('/')[-1]
         if "test_" in filename or "_test" in filename or not filename.endswith(".py"):
@@ -123,11 +126,11 @@ def main(from_commit, to_commit, keep_repo, output_filename):
             changes.get("modified", []) +
             changes.get("indirect_dependents", [])
         )
+    print("Find Affected Test functions")
     for root, _, files in os.walk(repo_path):
         for filename in files:
             if ("test_" in filename or "_test" in filename) and filename.endswith(".py"):
                 test_path = os.path.join(root, filename)
-                print(test_path)
                 relative_path = str(Path(test_path).relative_to(Path(repo_path)))
                 with open(test_path, "r") as tf:
                     try:
@@ -144,8 +147,10 @@ def main(from_commit, to_commit, keep_repo, output_filename):
                         print(f"Error parsing {test_path}: {e}")
                         continue
     gemini_suggester = GeminiSuggester()
+    print("Generate LLM Suggestions")
     suggestions = gemini_suggester.get_test_suggestions(affected_metadata_list, whole_test_code, whole_git_diff)
     if suggestions:
+        print(f"Report Generated at {report_path}")
         report = generate_suggestion_markdown(suggestions)
         with open(report_path, "w") as f:
             f.write("# Test Maintenance Report\n\n")

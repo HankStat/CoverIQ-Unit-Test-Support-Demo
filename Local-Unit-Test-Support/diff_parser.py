@@ -10,7 +10,7 @@ import shutil
 def get_changed_files(repo_path: str, from_commit:str, to_commit:str) -> List[str]:
     cmd = ["git", "-C", repo_path, "diff", "--name-only", from_commit, to_commit]
     result = subprocess.run(cmd, capture_output=True, text=True)
-    print(repo_path,result.stdout)
+    #print(repo_path,result.stdout)
     return result.stdout.strip().split("\n")
 
 def get_unpushed_changed_files(repo_path: str, upstream_branch: str = "origin/main") -> List[str]:
