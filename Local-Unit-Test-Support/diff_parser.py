@@ -46,7 +46,8 @@ class GitDiffParser:
         self.from_commit = from_commit
         self.to_commit = to_commit
         self.keep_repo = keep_repo
-        self.repo_path = "../../"
+        relative_path = "../"
+        self.repo_path = os.path.abspath(relative_path)
         # download the repo
         if keep_repo:
             temp_dir = Path("./cloned_repo")

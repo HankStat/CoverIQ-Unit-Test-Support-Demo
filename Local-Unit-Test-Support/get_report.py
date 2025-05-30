@@ -89,8 +89,9 @@ def main(from_commit, to_commit, keep_repo, output_filename):
     report_path = os.path.join(os.path.dirname(__file__), output_filename)
     git_parser = GitDiffParser(from_commit, to_commit, keep_repo)
     repo_path = git_parser.repo_path
+    code_metadata_path = os.path.join(repo_path, "Demo-Project")
     # get all code files
-    code_files = get_code_files(repo_path)
+    code_files = get_code_files(code_metadata_path)
     # divide into chunks
     code_blocks = {}
     for file in code_files:
@@ -157,7 +158,7 @@ def main(from_commit, to_commit, keep_repo, output_filename):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Show git diff between two commits in a GitHub repo")
     # parser.add_argument("repo_url", help="GitHub repository URL")
-    parser.add_argument("--from", dest="from_commit", default="HEAD^", help="Base commit (default: HEAD^)")
+    parser.add_argument("--from", dest="from_commit", default="origin/main", help="Base commit (default: HEAD^)")
     parser.add_argument("--to", dest="to_commit", default="HEAD", help="Target commit (default: HEAD)")
     parser.add_argument("--keep",  action="store_true", help="Keep cloned repo after diff (default: delete)")
     parser.add_argument("--output", default="report")
